@@ -1,27 +1,39 @@
-pragma solidity ^0.8.26;
+pragma solidity ^0.4.25;
 
+contract Bank 
+{
+    int private bal; // balance variable
 
-contract SimpleBank {
-    address public owner;
-    uint256 public balance;
-
-    constructor() {
-        owner = msg.sender;
-        balance = 0;
+    // Constructor: initializes balance to 1
+    constructor() public 
+    {
+        bal = 1;
     }
 
-    function deposit(uint256 amount) public {
-        require(msg.sender == owner, "Only the owner can deposit money");
-        balance += amount;
+    // Function to get current balance
+    function getBalance() public view returns (int) 
+    {
+        return bal;
     }
 
-    function withdraw(uint256 amount) public {
-        require(msg.sender == owner, "Only the owner can withdraw money");
-        require(amount <= balance, "Insufficient balance");
-        balance -= amount;
+    // Function to deposit amount
+    function deposit(int amt) public 
+    {
+        require(amt > 0, "Deposit amount must be positive");
+        bal = bal + amt;
     }
 
-    function getBalance() public view returns (uint256) {
-        return balance;
+    // Function to withdraw amount
+    function withdraw(int amt) public 
+    {
+        if (bal < amt) 
+        {
+            // Not enough balance
+            revert("Insufficient balance");
+        } 
+        else 
+        {
+            bal = bal - amt;
+        }
     }
 }
