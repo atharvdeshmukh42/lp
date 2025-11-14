@@ -2,37 +2,40 @@
 pragma solidity ^0.8.0;
 
 contract StudentData {
-    // Structure for Student
+    
+    // Structure to store student details
     struct Student {
-        uint256 rollNo;
+        uint rollNo;
         string name;
-        uint256 age;
+        uint age;
+        string course;
     }
 
-    // Array to store multiple students
+    // Dynamic array to store multiple students
     Student[] public students;
 
-    // Event for logging
-    event StudentAdded(uint256 rollNo, string name, uint256 age);
-
-    // Function to add new student
-    function addStudent(uint256 _rollNo, string memory _name, uint256 _age) public {
-        students.push(Student(_rollNo, _name, _age));
-        emit StudentAdded(_rollNo, _name, _age);
+    // Function to add student details
+    function addStudent(uint _rollNo, string memory _name, uint _age, string memory _course) public {
+        students.push(Student(_rollNo, _name, _age, _course));
     }
 
-    // Function to get student details by index
-    function getStudent(uint256 index) public view returns (uint256, string memory, uint256) {
+    // Function to get total number of students
+    function getStudentCount() public view returns (uint) {
+        return students.length;
+    }
+
+    // Function to get details of a particular student by index
+    function getStudent(uint index) public view returns (uint, string memory, uint, string memory) {
         require(index < students.length, "Invalid index");
         Student memory s = students[index];
-        return (s.rollNo, s.name, s.age);
-    }  
-
-    // Fallback function (called when no function matches or plain Ether is sent)
-    fallback() external payable {
-        // Accept Ether but do nothing
+        return (s.rollNo, s.name, s.age, s.course);
     }
 
-    // Receive function to accept Ether directly
+    // Fallback function — triggered when contract receives Ether or invalid call
+    fallback() external payable {
+        // You can log or accept Ether here
+    }
+
+    // Receive function — to receive plain Ether transfers
     receive() external payable {}
 }
